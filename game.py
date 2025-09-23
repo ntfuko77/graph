@@ -1,6 +1,6 @@
 class ceo():
     class vertex():
-        def __init__(self,name,quality_weight_list=None)
+        def __init__(self,name,quality_weight_list=None):...
     fertilizer=[0.3,0.3,0.4]
     rubber=[0.1,0.7,0.2]
     engine=[0.5,0.1,0.4]
