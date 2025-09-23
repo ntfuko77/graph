@@ -14,6 +14,7 @@ class vertex():
         self.edges=[]
 class graph():
     def __init__(self):
+        #多存一次vertexe name作為key，方便查找
         self.vertexes={}
         self.edges=[]
     @property
