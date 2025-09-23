@@ -6,8 +6,9 @@ class edge():
     def set_weight(self,data):
         self.weight.update(data)
 class vertex():
-    def __init__(self,name):
+    def __init__(self,name,type=[]):
         self.name=name
+        self.type=[]
 class graph():
     def __init__(self):
         self.vertexes={}
