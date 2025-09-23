@@ -1,3 +1,6 @@
+import sql
+sql.
+
 class ceo():
     class vertex():
         def __init__(self,name,quality_weight_list=None):...
@@ -28,7 +31,7 @@ class ceo():
     def qcost(self):
         return f"product name: {self.name}\n cost: {self.cost()}\n sum: {sum(self.cost())}"
     
-x=ceo([0.1,0.1,0.1],[100,200,300],'fertilizer')
-print(x.qcost())
-print(ceo.qquality('fertilizer',[98,60,100]))
+# x=ceo([0.1,0.1,0.1],[100,200,300],'fertilizer')
+# print(x.qcost())
+# print(ceo.qquality('fertilizer',[98,60,100]))
     
