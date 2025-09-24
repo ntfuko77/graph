@@ -29,22 +29,11 @@ class sql():
     def zero_weight()->dict:
         return {'quality':0,'requirement':0,'labor_hour':0,'manager_hour':0,'production_hour':0}
     def search_edge(self,source:str):
-        self.db.cur.execute("SELECT * FROM edge_with_short_weight WHERE source=?", (source,))
-        context=list(self.db.cur.fetchall())
+        context=self.db.search_edge(source)
         print(f'product name: {source}')
         for i in context:
             print(i[1])
             print(f'quality {i[2]} requirement {i[3]}')
-    def weight_update(self,source:str,target:str,data:dict):
-        self.db.cur.execute("SELECT weight_id FROM edge WHERE source=? AND target=?", (source,target))
-        weight_id=self.db.cur.fetchone()[0]
-        keys=','.join([f"{k}=?" for k in data.keys()])
-        values=(weight_id,)
-        self.db.cur.execute(f"UPDATE weight SET {keys} WHERE id=?",values)
-        self.db.conn.commit()
-    def search_vertex(self,name:str)->list:
-        self.db.cur.execute("SELECT * FROM vertex WHERE name=?", (name,))
-        return self.db.cur.fetchall()
     def add_unit_data(self,source:vertex,target:vertex,weight:dict):
         self.db.add_vertex(source.name,source.type)
         self.db.add_vertex(target.name,target.type)
