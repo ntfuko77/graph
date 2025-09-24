@@ -182,5 +182,8 @@ cython_debug/
 
 .gitattributes
 .gitignore
-ceo.slite
+
 # my data
+~$ceo.xlsx
+ceo.xlsx
+ceo.slite

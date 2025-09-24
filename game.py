@@ -17,6 +17,9 @@ class sql():
     def add_weight(self,weight:dict)->int:
         self.db.add_weight(weight)
         return self.db.cur.lastrowid
+    @staticmethod
+    def zero_weight()->dict:
+        return {'quality':0,'requirement':0,'labor_hour':0,'manager_hour':0,'production_hour':0}
     
     
 
