@@ -186,5 +186,5 @@ cython_debug/
 # my data
 ~$ceo.xlsx
 ceo.xlsx
-ceo.slite
+ceo.sqlite
 dijkstra.py
