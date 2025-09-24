@@ -49,9 +49,11 @@ class database():
         self.cur.execute("SELECT weight_id FROM edge WHERE source=? AND target=?", (source,target))
         weight_id=self.cur.fetchone()[0]
         keys=','.join([f"{k}=?" for k in data.keys()])
-        values=tuple((data.values())+(weight_id,))
+        values=tuple(list(data.values())+[weight_id])
         self.cur.execute(f"UPDATE weight SET {keys} WHERE id=?",values)
         self.conn.commit()
+        #debug message
+        print(f'weight_id {source} to {target} :id {weight_id} update success')
     def search_edge(self,source:str):
         self.cur.execute("SELECT * FROM edge_with_short_weight WHERE source=?", (source,))
         context=list(self.cur.fetchall())

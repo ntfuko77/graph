@@ -38,10 +38,13 @@ class sql():
 
 
 def debug():
-    a=vertex('wheat','farming')
-    b=vertex('fertilizer','upstream manufacturing')
+    a='wheat'
+    b='machine'
     d=sql()
-    return a,b,d
+    w=d.zero_weight()
+    w['quality']=0.3
+    f=d.db.weight_update
+    return a,b,d,w,f
     
 
 # class ceo():
