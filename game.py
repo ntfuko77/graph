@@ -1,7 +1,9 @@
 from sql import database
 from enum import Enum
+from graph import vertex
 class profile(Enum):
     db_name='ceo.slite'
+
 class sql():
     #database definition
     '''CREATE VIEW IF NOT EXISTS edge_with_short_weight AS
@@ -33,15 +35,23 @@ class sql():
         for i in context:
             print(i[1])
             print(f'quality {i[2]} requirement {i[3]}')
-    def weight_update(self,weight_id:int,data:dict):
+    def weight_update(self,source:str,target:str,data:dict):
+        self.db.cur.execute("SELECT weight_id FROM edge WHERE source=? AND target=?", (source,target))
+        weight_id=self.db.cur.fetchone()[0]
         keys=','.join([f"{k}=?" for k in data.keys()])
         values=(weight_id,)
         self.db.cur.execute(f"UPDATE weight SET {keys} WHERE id=?",values)
         self.db.conn.commit()
-
     def search_vertex(self,name:str)->list:
         self.db.cur.execute("SELECT * FROM vertex WHERE name=?", (name,))
         return self.db.cur.fetchall()
+    def add_unit_data(self,source:vertex,target:vertex,weight:dict):
+        self.db.add_vertex(source.name,source.type)
+        self.db.add_vertex(target.name,target.type)
+        weight_id=self.add_weight(weight)
+        self.db.add_edge(source.name,target.name,weight_id)
+        #display
+        self.search_edge(source.name)
 
     
     
