@@ -45,22 +45,22 @@ class database():
         self.cur.execute(weight_table_code)
         self.conn.commit()
     def weight_update(self,source:str,target:str,data:dict):
-        self.db.cur.execute("SELECT weight_id FROM edge WHERE source=? AND target=?", (source,target))
-        weight_id=self.db.cur.fetchone()[0]
+        self.cur.execute("SELECT weight_id FROM edge WHERE source=? AND target=?", (source,target))
+        weight_id=self.cur.fetchone()[0]
         keys=','.join([f"{k}=?" for k in data.keys()])
         values=(weight_id,)
-        self.db.cur.execute(f"UPDATE weight SET {keys} WHERE id=?",values)
-        self.db.conn.commit()
+        self.cur.execute(f"UPDATE weight SET {keys} WHERE id=?",values)
+        self.conn.commit()
     def search_edge(self,source:str):
-        self.db.cur.execute("SELECT * FROM edge_with_short_weight WHERE source=?", (source,))
-        context=list(self.db.cur.fetchall())
+        self.cur.execute("SELECT * FROM edge_with_short_weight WHERE source=?", (source,))
+        context=list(self.cur.fetchall())
         return context
     def search_vertex(self,name:str)->list:
-        self.db.cur.execute("SELECT * FROM vertex WHERE name=?", (name,))
-        return self.db.cur.fetchall()
+        self.cur.execute("SELECT * FROM vertex WHERE name=?", (name,))
+        return self.cur.fetchall()
     def add_weight(self,weight:dict)->int:
-        self.db.add_weight(weight)
-        return self.db.cur.lastrowid
+        self.add_weight(weight)
+        return self.cur.lastrowid
     def __exit__(self, exc_type, exc_value, traceback):
         self.cur.close()
         self.conn.close()

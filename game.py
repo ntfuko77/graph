@@ -30,13 +30,8 @@ class sql():
         for i in context:
             print(i[1])
             print(f'quality {i[2]} requirement {i[3]}')
-    def add_unit_data(self,source:vertex,target:vertex,weight:dict):
-        self.db.add_vertex(source.name,source.type)
-        self.db.add_vertex(target.name,target.type)
-        weight_id=self.add_weight(weight)
-        self.db.add_edge(source.name,target.name,weight_id)
-        #display
-        self.search_edge(source.name)
+    
+
 
     
     
