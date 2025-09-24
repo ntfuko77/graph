@@ -88,11 +88,13 @@ class database():
         for t,w in zip(target,weight):
             self.add_unit_data(source,t,w)
     def classical_search_edge(self,source:str):
-        target=self.cur.execute('''SELECT target, weight_id FROM edge WHERE source=?''', (source,))
-        output=[]
-        for t in target:
-            weight=self.cur.execute('''SELECT * FROM weight WHERE id=?''', (t[1],))
-            output.append((t[0],weight.fetchone()))
+        # join edge and weight tables to get complete information
+        output=self.cur.execute('''SELECT t.target, w.* FROM edge t
+                                JOIN weight w ON t.weight_id = w.id
+                                WHERE t.source = ?''', (source,)).fetchall()
+        # format output
+        d=self.cur.description
+        output=[{d[i][0]:row[i] for i in range(len(d))} for row in output]
         return output
 
 def debug():
