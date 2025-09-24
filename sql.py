@@ -1,7 +1,7 @@
 import sqlite3
 
 
-
+# Database functions
 def connect(name='ceo.slite'):
     c=sqlite3.connect(name)
     c.execute("PRAGMA foreign_keys = ON")
@@ -9,9 +9,14 @@ def connect(name='ceo.slite'):
 def add_vertex(c,name:str,type:str=''):
     c.execute("INSERT OR IGNORE INTO vertex (name,type) VALUES (?,?)",(name,type))
     c.commit()
-def add_edge(c,source:str,target:str,weight:dict={}):
-    weight_str=str(weight)
-    c.execute("INSERT OR IGNORE INTO edge (source,target,weight) VALUES (?,?,?)",(source,target,weight_str))
+def add_edge(c,source:str,target:str,weight:int):
+    c.execute("INSERT OR IGNORE INTO edge (source,target,weight) VALUES (?,?,?)",(source,target,weight))
+    c.commit()
+def add_weight(c,weight:dict):
+    keys=','.join(weight.keys())
+    question_marks=','.join(['?']*len(weight))
+    values=tuple(weight.values())
+    c.execute(f"INSERT INTO weight ({keys}) VALUES ({question_marks})",values)
     c.commit()
 def load_data(c):
     c.execute("SELECT * FROM vertex")
@@ -41,7 +46,7 @@ def create_tables(file_path:str,weight_table_code:str):
 
 
 
-#CODE TO CREATE TABLES
+#CODE TO me
 if __name__=='__main__':
     weight_table_code='''
     CREATE TABLE IF NOT EXISTS weight
