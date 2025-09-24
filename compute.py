@@ -5,18 +5,19 @@ import numpy
 
 class profile(Enum):
     db_name='ceo.sqlite'
+    search_ignore=['machine']
 class compute():
-    def __init__(self,weight_name_list:list=[]):
+    def __init__(self):
         self.db=database(profile.db_name.value)
-        self.weight_name_space=weight_name_list
-    def search_path(self,source:str,target:str=None):
+
+    def search_path(self,source:str,target:str=None,ignore=profile.search_ignore.value):
         check=self.db.classical_search_edge(source)
         if len(check)==0:
             raise ValueError(f'{source} not in vertex table')
         keys=check[1]
         print(keys)
         output_weight=numpy.ones(len(keys)-1) #exclude target column
-        context=check[0]
+        context=[i for i in check[0] if i[0] not in ignore]
         output=context
         stack=[]
         if context==[]:
@@ -27,6 +28,7 @@ class compute():
             stack=stack+[i[0] for i in context]
             next=stack.pop()
             context=self.db.classical_search_edge(next)[0]
+            context=[i for i in context if i[0] not in ignore]
             output=output+context
         if target:
             return [(x,y) for x,y in zip(keys[1:],output_weight)]
