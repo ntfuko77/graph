@@ -94,8 +94,8 @@ class database():
                                 WHERE t.source = ?''', (source,)).fetchall()
         # format output
         d=self.cur.description
-        output=[{d[i][0]:row[i] for i in range(len(d))} for row in output]
-        return output
+        keys=[x[0] for x in d][1:]  # exclude target which is the first column
+        return (output,keys)
 
 def debug():
     db_name='ceo.sqlite'
