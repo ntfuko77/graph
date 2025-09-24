@@ -29,11 +29,11 @@ class sql():
     def search_edge(self,source:str):
         self.db.cur.execute("SELECT * FROM edge_with_short_weight WHERE source=?", (source,))
         context=list(self.db.cur.fetchall())
-        print(source)
+        print(f'product name: {source}')
         for i in context:
-            for j in i:
-                if j==source:continue
-                print(j,end=' ')
+            print(i[1])
+            print(f'quality {i[2]} requirement {i[3]}')
+            
 
         
 
@@ -80,4 +80,5 @@ class ceo():
 
 if __name__=='__main__':
     db=sql()
+    db.search_edge('fertilizer')
 
