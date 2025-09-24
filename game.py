@@ -25,6 +25,10 @@ class sql():
     def zero_weight()->dict:
         return {'quality':0,'requirement':0,'labor_hour':0,'manager_hour':0,'production_hour':0}
     def search_edge(self,source:str):
+        check=self.db.search_vertex(source)
+        if len(check)==0:
+            raise ValueError(f'{source} not in vertex table')
+        
         context=self.db.search_edge(source)
         print(f'product name: {source}')
         for i in context:
