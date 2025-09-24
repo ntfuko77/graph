@@ -15,12 +15,13 @@ class database():
     def add_edge(self, source: str, target: str, weight: int):
         self.cur.execute("INSERT OR IGNORE INTO edge (source, target, weight_id) VALUES (?, ?, ?)", (source, target, weight))
         self.conn.commit()
-    def add_weight(self,weight:dict):
+    def add_weight(self,weight:dict)->int:
         keys=','.join(weight.keys())
         question_marks=','.join(['?']*len(weight))
         values=tuple(weight.values())
         self.cur.execute(f"INSERT INTO weight ({keys}) VALUES ({question_marks})",values)
         self.conn.commit()
+        return self.cur.lastrowid
     def load_data(self):
         self.cur.execute("SELECT * FROM vertex")
         vertexes=self.cur.fetchall()
@@ -58,9 +59,7 @@ class database():
     def search_vertex(self,name:str)->list:
         self.cur.execute("SELECT * FROM vertex WHERE name=?", (name,))
         return self.cur.fetchall()
-    def add_weight(self,weight:dict)->int:
-        self.add_weight(weight)
-        return self.cur.lastrowid
+
     def __exit__(self, exc_type, exc_value, traceback):
         self.cur.close()
         self.conn.close()

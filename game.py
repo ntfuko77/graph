@@ -33,7 +33,11 @@ class sql():
     
 
 
-    
+def debug():
+    a=vertex('wheat','farming')
+    b=vertex('fertilizer','upstream manufacturing')
+    d=sql()
+    return a,b,d
     
 
 # class ceo():
