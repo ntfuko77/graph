@@ -8,10 +8,9 @@ class edge():
     def __repr__(self):
         return f"edge({self.source.name}->{self.target.name},{self.weight})"
 class vertex():
-    def __init__(self,name,type=[]):
+    def __init__(self,name:str,type:str):
         self.name=name
-        self.type=[]
-        self.edges=[]
+        self.type=type
 class graph():
     def __init__(self):
         #多存一次vertexe name作為key，方便查找
