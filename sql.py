@@ -1,4 +1,5 @@
 import sqlite3
+from graph import vertex
 
 
 # Database functions
@@ -63,6 +64,17 @@ class database():
     def __exit__(self, exc_type, exc_value, traceback):
         self.cur.close()
         self.conn.close()
+    def add_unit_data(self,source:vertex,target:vertex,weight:dict):
+        self.add_vertex(source.name,source.type)
+        self.add_vertex(target.name,target.type)
+        weight_id=self.add_weight(weight)
+        self.add_edge(source.name,target.name,weight_id)
+        #display
+        context=self.search_edge(source.name)
+        print('input data success:')
+        print(f'product name: {source.name}')
+        print(f'component name: {target.name}')
+        print(weight)
 
 
 
