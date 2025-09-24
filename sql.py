@@ -22,7 +22,7 @@ class database():
         self.conn.commit()
     def load_data(self):
         self.cur.execute("SELECT * FROM vertex")
-        vertexes=c.fetchall()
+        vertexes=self.cur.fetchall()
         self.cur.execute("SELECT * FROM edge")
         edges=self.cur.fetchall()
         return vertexes,edges
@@ -61,4 +61,4 @@ if __name__=='__main__':
     production_hour INT,
     CHECK (quality >= 0 AND requirement >= 0 AND labor_hour >= 0 AND manager_hour >= 0 AND production_hour >= 0)
     )'''
-    create_tables('ceo.slite',weight_table_code)
+
