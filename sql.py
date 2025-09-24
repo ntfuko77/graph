@@ -57,6 +57,9 @@ class database():
     def search_vertex(self,name:str)->list:
         self.db.cur.execute("SELECT * FROM vertex WHERE name=?", (name,))
         return self.db.cur.fetchall()
+    def add_weight(self,weight:dict)->int:
+        self.db.add_weight(weight)
+        return self.db.cur.lastrowid
     def __exit__(self, exc_type, exc_value, traceback):
         self.cur.close()
         self.conn.close()
