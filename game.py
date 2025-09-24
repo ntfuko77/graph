@@ -2,7 +2,7 @@ from sql import database
 from enum import Enum
 from graph import vertex
 class profile(Enum):
-    db_name='ceo.slite'
+    db_name='ceo.sqlite'
 
 class sql():
     #database definition
@@ -21,6 +21,8 @@ class sql():
         )'''
     def __init__(self):
         self.db=database(profile.db_name.value)
+    #the following methods cannot be moved downward because they are designed 
+    # based on specific examples
     @staticmethod
     def zero_weight()->dict:
         return {'quality':0,'requirement':0,'labor_hour':0,'manager_hour':0,'production_hour':0}
@@ -34,17 +36,25 @@ class sql():
         for i in context:
             print(i[1])
             print(f'quality {i[2]} requirement {i[3]}')
+
     
 
 
 def debug():
-    a='wheat'
-    b='machine'
+    a=vertex('cookie','food')
+    m=vertex('machine','')
+    b=vertex('egg','food')
+    c=vertex('flour','upstream manufacturing')
+    
     d=sql()
-    w=d.zero_weight()
-    w['quality']=0.3
-    f=d.db.weight_update
-    return a,b,d,w,f
+    bw,mw,cw=d.zero_weight(),d.zero_weight(),d.zero_weight()
+    bw['quality'],bw['requirement']=0.2,0.1
+    cw['quality'],cw['requirement']=0.4,0.2
+    mw['quality'],mw['requirement']=0.4,0
+    w=[bw,mw,cw]
+    target=[b,m,c]
+
+    return lambda : d.db.quick_add_edge(a,target,w)
     
 
 # class ceo():
@@ -82,6 +92,15 @@ def debug():
 # print(ceo.qquality('fertilizer',[98,60,100]))
 
 if __name__=='__main__':
-    db=sql()
-    db.search_edge('fertilizer')
+    a=vertex('egg','food')
+    m=vertex('machine','')
+    b=vertex('feed','upstream manufacturing')
+    
+    d=sql()
+    bw,mw=d.zero_weight(),d.zero_weight()
+    bw['quality'],bw['requirement']=0.6,0.2
+    mw['quality'],mw['requirement']=0.4,0
+    w=[bw,mw]
+    target=[b,m]
+    d.db.quick_add_edge(a,target,w)
 

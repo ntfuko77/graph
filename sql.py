@@ -76,9 +76,29 @@ class database():
         print(f'product name: {source.name}')
         print(f'component name: {target.name}')
         print(weight)
+    def quick_add_edge(self,source:vertex,target:list,weight:list):
+        #type check
+        if not all([isinstance(x,vertex) for x in target]):
+            raise TypeError('target must be list of vertex')
+        if not all([isinstance(x,dict) for x in weight]):
+            raise TypeError('weight must be list of dict')
+        if len(target)!=len(weight):
+            raise ValueError('target and weight must be same length')
+            #add data
+        for t,w in zip(target,weight):
+            self.add_unit_data(source,t,w)
+    def classical_search_edge(self,source:str):
+        target=self.cur.execute('''SELECT target, weight_id FROM edge WHERE source=?''', (source,))
+        output=[]
+        for t in target:
+            weight=self.cur.execute('''SELECT * FROM weight WHERE id=?''', (t[1],))
+            output.append((t[0],weight.fetchone()))
+        return output
 
-
-
+def debug():
+    db_name='ceo.sqlite'
+    d=database(db_name)
+    return d
 #CODE TO me
 if __name__=='__main__':
     weight_table_code='''
