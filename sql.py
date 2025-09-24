@@ -2,47 +2,50 @@ import sqlite3
 
 
 # Database functions
-def connect(name='ceo.slite'):
-    c=sqlite3.connect(name)
-    c.execute("PRAGMA foreign_keys = ON")
-    return c
-def add_vertex(c,name:str,type:str=''):
-    c.execute("INSERT OR IGNORE INTO vertex (name,type) VALUES (?,?)",(name,type))
-    c.commit()
-def add_edge(c,source:str,target:str,weight:int):
-    c.execute("INSERT OR IGNORE INTO edge (source,target,weight) VALUES (?,?,?)",(source,target,weight))
-    c.commit()
-def add_weight(c,weight:dict):
-    keys=','.join(weight.keys())
-    question_marks=','.join(['?']*len(weight))
-    values=tuple(weight.values())
-    c.execute(f"INSERT INTO weight ({keys}) VALUES ({question_marks})",values)
-    c.commit()
-def load_data(c):
-    c.execute("SELECT * FROM vertex")
-    vertexes=c.fetchall()
-    c.execute("SELECT * FROM edge")
-    edges=c.fetchall()
-    return vertexes,edges
-def reset_db(c):
-    c.execute("DROP TABLE IF EXISTS edge")
-    c.execute("DROP TABLE IF EXISTS vertex")
-    c.commit()
-def create_tables(file_path:str,weight_table_code:str):
-    c=connect(file_path)
-    c.execute('''CREATE TABLE IF NOT EXISTS vertex
-                (name TEXT PRIMARY KEY,
-                type TEXT)''')
-    c.execute('''CREATE TABLE IF NOT EXISTS edge
-                (source TEXT,
-                target TEXT,
-                weight_id INT UNIQUE,
-                PRIMARY KEY (source, target),
-                FOREIGN KEY (source) REFERENCES vertex(name),
-                FOREIGN KEY (target) REFERENCES vertex(name))''')
-    c.execute(weight_table_code)
-    c.commit()
-    c.close()
+class database():
+    def __init__(self,name):
+        self.conn=sqlite3.connect(name)
+        self.conn.execute('PRAGMA foreign_keys = ON')
+        self.cur=self.conn.cursor()
+
+    def add_vertex(self,name:str,type:str=''):
+        self.cur.execute("INSERT OR IGNORE INTO vertex (name,type) VALUES (?,?)",(name,type))
+        self.conn.commit()
+    def add_edge(self, source: str, target: str, weight: int):
+        self.cur.execute("INSERT OR IGNORE INTO edge (source, target, weight_id) VALUES (?, ?, ?)", (source, target, weight))
+        self.conn.commit()
+    def add_weight(self,weight:dict):
+        keys=','.join(weight.keys())
+        question_marks=','.join(['?']*len(weight))
+        values=tuple(weight.values())
+        self.cur.execute(f"INSERT INTO weight ({keys}) VALUES ({question_marks})",values)
+        self.conn.commit()
+    def load_data(self):
+        self.cur.execute("SELECT * FROM vertex")
+        vertexes=c.fetchall()
+        self.cur.execute("SELECT * FROM edge")
+        edges=self.cur.fetchall()
+        return vertexes,edges
+    def reset_db(self):
+        self.cur.execute("DROP TABLE IF EXISTS edge")
+        self.cur.execute("DROP TABLE IF EXISTS vertex")
+        self.conn.commit()
+    def create_tables(self, weight_table_code: str):
+        self.cur.execute('''CREATE TABLE IF NOT EXISTS vertex
+                        (name TEXT PRIMARY KEY,
+                        type TEXT)''')
+        self.cur.execute('''CREATE TABLE IF NOT EXISTS edge
+                        (source TEXT,
+                        target TEXT,
+                        weight_id INT UNIQUE,
+                        PRIMARY KEY (source, target),
+                        FOREIGN KEY (source) REFERENCES vertex(name),
+                        FOREIGN KEY (target) REFERENCES vertex(name))''')
+        self.cur.execute(weight_table_code)
+        self.conn.commit()
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.cur.close()
+        self.conn.close()
 
 
 

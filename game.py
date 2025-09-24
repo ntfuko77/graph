@@ -1,5 +1,24 @@
-import sql
-sql.
+from sql import database
+from enum import Enum
+class profile(Enum):
+    db_name='ceo.slite'
+class sql():
+    def __init__(self):
+        self.db=database(profile.db_name.value)
+        self.db.create_tables('''CREATE TABLE IF NOT EXISTS weight
+        (id INTEGER PRIMARY KEY AUTOINCREMENT,
+        quality REAL,
+        requirement REAL,
+        labor_hour INT,
+        manager_hour INT,
+        production_hour INT,
+        CHECK (quality >= 0 AND requirement >= 0 AND labor_hour >= 0 AND manager_hour >= 0 AND production_hour >= 0)
+        )''')
+    def add_weight(self,weight:dict)->int:
+        self.db.add_weight(weight)
+        return self.db.cur.lastrowid
+    
+    
 
 class ceo():
     class vertex():
@@ -34,4 +53,7 @@ class ceo():
 # x=ceo([0.1,0.1,0.1],[100,200,300],'fertilizer')
 # print(x.qcost())
 # print(ceo.qquality('fertilizer',[98,60,100]))
-    
+
+if __name__=='__main__':
+    db=sql()
+
