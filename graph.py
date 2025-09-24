@@ -11,6 +11,8 @@ class vertex():
     def __init__(self,name:str,type:str):
         self.name=name
         self.type=type
+    def __repr__(self):
+        return f"vertex({self.name},{self.type})"
 class graph():
     def __init__(self):
         #多存一次vertexe name作為key，方便查找
