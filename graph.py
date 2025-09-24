@@ -1,3 +1,5 @@
+import numpy
+
 class edge():
     def __init__(self,source:'vertex',target:'vertex',weight={}):
         self.source=source
@@ -11,6 +13,8 @@ class vertex():
     def __init__(self,name:str,type:str):
         self.name=name
         self.type=type
+    def reset_weight(self,length:int):
+        self.weight=numpy.ones(length)
     def __repr__(self):
         return f"vertex({self.name},{self.type})"
 class graph():
