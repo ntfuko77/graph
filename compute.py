@@ -6,6 +6,13 @@ class weight():
     def __init__(self,keys:list):
         self.keys=keys
         self.weight=numpy.zeros(len(keys))
+    def _np_truncate(self,x,digits=3):
+        factor=10**digits
+        return numpy.trunc(x*factor)/factor
+    def set_weight(self,data:numpy.array):
+        data=self._np_truncate(data)
+        data=[float(i) for i in data]
+        self.weight=data
     def __repr__(self):
         return f"weight({dict(zip(self.keys,self.weight))})"
 class profile(Enum):
@@ -14,9 +21,7 @@ class profile(Enum):
 class compute():
     def __init__(self):
         self.db=database(profile.db_name.value)
-    def np_truncate(self,x,digits=3):
-        factor=10**digits
-        return numpy.trunc(x*factor)/factor
+
 
     def search_path(self,source:str,target:str,ignore=profile.search_ignore.value):
         check=self.db.search_vertex(source)
@@ -44,9 +49,7 @@ class compute():
             return paths
         paths=recursive_search(source,target,output_weight,ignore)
         sumation=weight(keys[1:])
-        sumation.weight=numpy.sum([x[1] for x in paths if x[0]==target],axis=0)
-        sumation.weight=self.np_truncate(sumation.weight)
-        sumation.weight=[float(i) for i in sumation.weight]
+        sumation.set_weight(numpy.sum([x[1] for x in paths if x[0]==target],axis=0))
         return paths+[sumation]
 
 
