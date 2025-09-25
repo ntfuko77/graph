@@ -112,8 +112,8 @@ class database():
 def debug():
     db_name='ceo.sqlite'
     d=database(db_name)
-    new=['rubber', ['chemical', 'latex', 'machine'], [{'quality': 0.1, 'requirement': 0.2, 'labor_hour': 0, 'manager_hour': 0, 'production_hour': 0}, {'quality': 0.7, 'requirement': 0.5, 'labor_hour': 0, 'manager_hour': 0, 'production_hour': 0}, {'quality': 0.2, 'requirement': 0, 'labor_hour': 0, 'manager_hour': 0, 'production_hour': 0}]]
-    return d,new
+    
+    return d
 #CODE TO me
 if __name__=='__main__':
     weight_table_code='''
