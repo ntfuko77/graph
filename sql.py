@@ -8,7 +8,14 @@ class database():
         self.conn=sqlite3.connect(name)
         self.conn.execute('PRAGMA foreign_keys = ON')
         self.cur=self.conn.cursor()
-
+    @property
+    def weight_name(self)->list:
+        self.cur.execute("PRAGMA table_info(weight)")
+        return [i[1] for i in self.cur.fetchall()][1:] #exclude id
+    @property
+    def zero_weight(self)->dict:
+        #generate a zero weight dict based on current weight table
+        return {k:0 for k in self.weight_name}
     def add_vertex(self,name:str,type:str=''):
         self.cur.execute("INSERT OR IGNORE INTO vertex (name,type) VALUES (?,?)",(name,type))
         self.conn.commit()
@@ -87,6 +94,11 @@ class database():
             #add data
         for t,w in zip(target,weight):
             self.add_unit_data(source,t,w)
+    def list_into_quick_add_edge(self,data:list):
+        for i in data:
+            if len(i)!=3:
+                raise ValueError('each item must be (source:vertex,target:list of vertex,weight:list of dict)')
+            self.quick_add_edge(i[0],i[1],i[2])
     def classical_search_edge(self,source:str):
         # join edge and weight tables to get complete information
         output=self.cur.execute('''SELECT t.target, w.* FROM edge t
@@ -100,7 +112,8 @@ class database():
 def debug():
     db_name='ceo.sqlite'
     d=database(db_name)
-    return d
+    new=['rubber', ['chemical', 'latex', 'machine'], [{'quality': 0.1, 'requirement': 0.2, 'labor_hour': 0, 'manager_hour': 0, 'production_hour': 0}, {'quality': 0.7, 'requirement': 0.5, 'labor_hour': 0, 'manager_hour': 0, 'production_hour': 0}, {'quality': 0.2, 'requirement': 0, 'labor_hour': 0, 'manager_hour': 0, 'production_hour': 0}]]
+    return d,new
 #CODE TO me
 if __name__=='__main__':
     weight_table_code='''
